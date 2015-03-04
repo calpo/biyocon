@@ -1,0 +1,23 @@
+{
+    "name": "calpo/biyocon",
+    "bin": ["biyocon"],
+    "description": "Webページのdiffを提供する",
+    "keywords": ["biyocon", "diff"],
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "calpo",
+            "email": "calpo22@gmail.com"
+        }
+    ],
+    "require": {
+    },
+    "require-dev": {
+    },
+	"autoload": {
+		"psr-4": {
+			"Biyocon\\": "src/"
+		}
+	}
+}

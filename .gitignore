@@ -1,0 +1,6 @@
+build/
+vendor/
+composer.lock
+.idea
+*.swp
+Thumbs.db
