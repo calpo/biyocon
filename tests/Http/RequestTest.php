@@ -3,11 +3,11 @@
  * This file is part of the biyocon.
  */
 
-namespace Biyocon\Test;
+namespace Biyocon\Http\Test;
 
 
-use Biyocon\Method;
-use Biyocon\Request;
+use Biyocon\Http\Method;
+use Biyocon\Http\Request;
 
 class RequestTest extends \PHPUnit_Framework_TestCase
 {

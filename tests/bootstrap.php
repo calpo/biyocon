@@ -1,5 +1,5 @@
 <?php
-namespace Biyocon\Test;
+namespace Biyocon\Http\Test;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 

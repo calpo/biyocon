@@ -3,7 +3,7 @@
  * This file is part of the biyocon.
  */
 
-namespace Biyocon;
+namespace Biyocon\Http;
 
 class Request
 {
