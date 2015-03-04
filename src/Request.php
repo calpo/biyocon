@@ -9,12 +9,60 @@ class Request
 {
     private $scheme = Scheme::HTTP;
     private $host;
-    private $port = 80;
+    private $port;
     private $user;
     private $pass;
     private $path = '/';
     private $data;
     private $fragment;
+    private $method = Method::GET;
+
+    /**
+     * @return string URL
+     */
+    public function getUrl()
+    {
+        $user = '';
+        $pass = '';
+        $port = '';
+        $query = '';
+        $fragment = '';
+        if (!empty($this->user)) {
+            $user = $this->user . '@';
+        }
+        if (!empty($this->pass)) {
+            $pass = $this->pass . ':';
+        }
+        if (!empty($this->port)) {
+            $port = ':' . $this->port;
+        }
+        if (!empty($this->data) && $this->method === METHOD::GET) {
+            $query = '?' . http_build_query($this->data);
+        }
+        if (!empty($this->fragment)) {
+            $fragment = '#' . $this->fragment;
+        }
+
+        return $this->scheme . '://' .
+            $user .
+            $pass .
+            $this->host .
+            $port .
+            $this->path .
+            $query .
+            $fragment;
+    }
+
+    /**
+     * @see Method
+     * @param string $method
+     * @return Request
+     */
+    public function setMethod($method)
+    {
+        $this->method = $method;
+        return $this;
+    }
 
     /**
      * set url
@@ -88,7 +136,7 @@ class Request
      */
     public function setPort($port)
     {
-        $this->port = $port;
+        $this->port = (int)$port;
         return $this;
     }
 

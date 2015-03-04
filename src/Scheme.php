@@ -13,7 +13,7 @@ namespace Biyocon;
  */
 class Scheme
 {
-    const HTTP = 'http';
+    const HTTP  = 'http';
     const HTTPS = 'https';
-    const FILE = 'file';
+    const FILE  = 'file';
 }
