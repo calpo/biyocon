@@ -22,6 +22,13 @@ class Response
     }
 
     /**
+     * @return array HTTP response headers
+     */
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+    /**
      * @return string content body
      */
     public function getBody()

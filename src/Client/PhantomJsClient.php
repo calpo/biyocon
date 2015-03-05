@@ -6,6 +6,7 @@
 namespace Biyocon\Client;
 
 
+use Biyocon\Exception\ClientErrorException;
 use Biyocon\Http\Request;
 use Biyocon\Http\Response;
 use JonnyW\PhantomJs;
@@ -21,22 +22,31 @@ class PhantomJsClient implements Client
         $response = new Response();
         $imageFile = sys_get_temp_dir() . '/biyocon-pjclient-' . uniqid() . '.jpg';
 
-        $pjClient = PhantomJs\Client::getInstance();
-        $pjClient->setBinDir(__DIR__ . '/../../bin');
-        $pjClient->addOption('--ignore-ssl-errors=true');
+        try {
+            $pjClient = PhantomJs\Client::getInstance();
+            $pjClient->setBinDir(__DIR__ . '/../../bin');
+            $pjClient->addOption('--ignore-ssl-errors=true');
 
-        $pjRequest = $pjClient->getMessageFactory()->createCaptureRequest($request->getUrl(), $request->getMethod());
-        $pjRequest->setCaptureFile($imageFile);
+            $pjRequest = $pjClient->getMessageFactory()->createCaptureRequest($request->getUrl(), $request->getMethod());
+            $pjRequest->setCaptureFile($imageFile);
 
-        $pjResponse = $pjClient->getMessageFactory()->createResponse();
+            $pjResponse = $pjClient->getMessageFactory()->createResponse();
 
-        $pjClient->send($pjRequest, $pjResponse);
+            $pjClient->send($pjRequest, $pjResponse);
 
-        $response->setScreenShot($imageFile);
-        unlink($imageFile);
-        $response->setStatus($pjResponse->getStatus());
-        $response->setHeadersByHash($pjResponse->getHeaders());
-        $response->setBody($pjResponse->getContent());
+            if (file_exists($imageFile)) {
+                $response->setScreenShot($imageFile);
+                unlink($imageFile);
+            }
+            $response->setStatus($pjResponse->getStatus());
+            $response->setHeadersByHash($pjResponse->getHeaders());
+            $response->setBody($pjResponse->getContent());
+        } catch(\Exception $e) {
+            if (file_exists($imageFile)) {
+                unlink($imageFile);
+            }
+            throw new ClientErrorException($e->getMessage(), (int)$e->getCode(), $e);
+        }
 
         return $response;
     }

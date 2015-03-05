@@ -11,18 +11,29 @@ use Biyocon\Http\Request;
 
 class PhantomJsClientTest extends \PHPUnit_Framework_TestCase
 {
-    public function testSendingRequest()
+    public function testClietReturnsResponseObject()
     {
         $request = new Request();
-        $request->setUrl('http://google.com/');
+        $request->setUrl(sprintf('http://%s:%d/index.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
         $client = new PhantomJsClient();
         $response = $client->send($request);
 
-        //echo $response->getStatus();
-        //print_r($response->getHeaders());
-        //echo $response->getBody();
+        $this->assertSame(200, $response->getStatus());
+        $this->assertNotEmpty($response->getHeaders());
+        $this->assertNotEmpty($response->getBody());
+        $this->assertFileExists($response->getScreenShot());
+    }
 
-        unset($response);
+    public function testClietReturnsResponseObjectWhenNotFound()
+    {
+        $request = new Request();
+        $request->setUrl(sprintf('http://%s:%d/no_file_exists.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
+
+        $client = new PhantomJsClient();
+        $response = $client->send($request);
+
+        $this->assertSame(404, $response->getStatus());
+        $this->assertNotEmpty($response->getHeaders());
     }
 }
