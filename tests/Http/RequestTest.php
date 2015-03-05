@@ -3,7 +3,7 @@
  * This file is part of the biyocon.
  */
 
-namespace Biyocon\Http\Test;
+namespace Biyocon\Test\Http;
 
 
 use Biyocon\Http\Method;

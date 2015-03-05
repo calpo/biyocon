@@ -6,11 +6,6 @@
 namespace Biyocon\Http;
 
 
-/**
- * Class Scheme
- *
- * Request class accepts these protocols
- */
 class Scheme
 {
     const HTTP  = 'http';

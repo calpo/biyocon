@@ -5,8 +5,11 @@
 
 namespace Biyocon\Http;
 
+
 class Request
 {
+    private $headers = [];
+    private $method = Method::GET;
     private $scheme = Scheme::HTTP;
     private $host;
     private $port;
@@ -15,7 +18,6 @@ class Request
     private $path = '/';
     private $data;
     private $fragment;
-    private $method = Method::GET;
 
     /**
      * @return string URL
@@ -51,6 +53,27 @@ class Request
             $this->path .
             $query .
             $fragment;
+    }
+
+    public function getHeaders()
+    {
+        return $this->headers;
+    }
+
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @param string $name
+     * @param string $value
+     * @return Request
+     */
+    public function addHeader($name, $value = '')
+    {
+        $this->headers[$name] = $value;
+        return $this;
     }
 
     /**
