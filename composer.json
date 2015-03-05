@@ -11,9 +11,21 @@
             "email": "calpo22@gmail.com"
         }
     ],
+    "config": {
+        "bin-dir": "bin"
+    },
     "require": {
+        "jonnyw/php-phantomjs": "3.*"
     },
     "require-dev": {
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ],
+        "post-update-cmd": [
+            "PhantomInstaller\\Installer::installPhantomJS"
+        ]
     },
 	"autoload": {
 		"psr-4": {
