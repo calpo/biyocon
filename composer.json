@@ -14,9 +14,6 @@
     "config": {
         "bin-dir": "bin"
     },
-    "require": {
-        "jonnyw/php-phantomjs": "3.*"
-    },
     "require-dev": {
     },
     "scripts": {
@@ -31,5 +28,8 @@
 		"psr-4": {
 			"Biyocon\\": "src/"
 		}
-	}
+	},
+    "require": {
+        "jonnyw/php-phantomjs": "3.*"
+    }
 }

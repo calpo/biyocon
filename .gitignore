@@ -4,6 +4,3 @@ composer.lock
 .idea
 *.swp
 Thumbs.db
-
-bin/phantomjs
-bin/phantomloader
