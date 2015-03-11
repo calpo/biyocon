@@ -16,6 +16,7 @@ class PhantomJsClient implements Client
     /**
      * @param Request $request
      * @return Response
+     * @throws ClientErrorException
      */
     public function send(Request $request)
     {
@@ -41,6 +42,7 @@ class PhantomJsClient implements Client
             $response->setStatus($pjResponse->getStatus());
             $response->setHeadersByHash($pjResponse->getHeaders());
             $response->setBody($pjResponse->getContent());
+
         } catch(\Exception $e) {
             if (file_exists($imageFile)) {
                 unlink($imageFile);

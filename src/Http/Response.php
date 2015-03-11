@@ -28,6 +28,23 @@ class Response
     {
         return $this->headers;
     }
+
+    /**
+     * @return array HTTP response headers
+     */
+    public function getHeadersAsText()
+    {
+        $text = '';
+        foreach ($this->getHeaders() as $key => $value) {
+            $text .= $key;
+            if (!empty($value)) {
+                $text .= ': ' . $value;
+            }
+            $text .= "\n";
+        }
+
+        return $text;
+    }
     /**
      * @return string content body
      */
