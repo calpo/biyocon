@@ -16,6 +16,12 @@
     },
     "require-dev": {
     },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/JBlond/php-diff"
+        }
+    ],
     "scripts": {
         "post-install-cmd": [
             "PhantomInstaller\\Installer::installPhantomJS"
@@ -30,6 +36,7 @@
 		}
 	},
     "require": {
-        "jonnyw/php-phantomjs": "3.*"
+        "jonnyw/php-phantomjs": "3.*",
+        "JBlond/php-diff": "dev-master"
     }
 }
