@@ -13,13 +13,18 @@ use Biyocon\Http\Request;
 class Crawler
 {
     /**
+     * @var Client
+     */
+    private $client;
+
+    /**
      * constructor
      *
      * @param Client $client
      */
     public function __construct (Client $client = null)
     {
-        $this->client = new PhantomJsClient();
+        $this->client = $client ?: new PhantomJsClient();
     }
 
     /**
@@ -27,7 +32,7 @@ class Crawler
      *
      * @param Request $requestA
      * @param Request $requestB
-     * @return Diff
+     * @return Result
      */
     public function compare (Request $requestA, Request $requestB)
     {
@@ -36,6 +41,8 @@ class Crawler
 
         $comparator = new ResponseComparator();
 
-        return $comparator->compare($responseA, $responseB);
+        $diff = $comparator->compare($responseA, $responseB);
+
+        return new Result($diff, $requestA, $requestB, $responseA, $responseB);
     }
 }

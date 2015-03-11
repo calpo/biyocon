@@ -38,7 +38,7 @@ class Diff
         $this->statusDiff = $statusDiff;
         $this->headerDiff = $headerDiff;
         $this->bodyDiff = $bodyDiff;
-        $this->renderer = new \Diff_Renderer_Html_Inline();
+        $this->renderer = new \Diff_Renderer_Html_SideBySide();
     }
 
     /**

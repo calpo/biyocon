@@ -29,11 +29,10 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $requestB = new Request();
         $requestB->setUrl(sprintf('http://%s:%d/index.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
-        $diff = $this->sut->compare($requestA, $requestB);
+        $result = $this->sut->compare($requestA, $requestB);
 
-        echo $diff->render();
-        $this->assertFalse($diff->hasDifference());
-        $this->assertEmpty($diff->render());
+        $this->assertFalse($result->getDiff()->hasDifference());
+        $this->assertEmpty($result->getDiff()->render());
     }
 
     public function testReturningDifferenceInResponseBody()
@@ -44,17 +43,17 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $requestB = new Request();
         $requestB->setUrl(sprintf('http://%s:%d/jsonB.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
-        $diff = $this->sut->compare($requestA, $requestB);
+        $result = $this->sut->compare($requestA, $requestB);
 
-        //print_r($diff->countBodyDiff());
-        //$html = $diff::wrapHtml($diff->render());
+        //print_r($result->getDiff()->countBodyDiff());
+        //$html = $result->getDiff()::wrapHtml($result->getDiff()->render());
         //file_put_contents('./tmp.html', $html);
 
-        $this->assertTrue($diff->hasDifference());
-        $this->assertTrue($diff->hasDifferentBody());
-        $this->assertNotEmpty($diff->render());
-        $this->assertEquals(2, $diff->getBodySummary()['+']);
-        $this->assertEquals(3, $diff->getBodySummary()['-']);
+        $this->assertTrue($result->getDiff()->hasDifference());
+        $this->assertTrue($result->getDiff()->hasDifferentBody());
+        $this->assertNotEmpty($result->getDiff()->render());
+        $this->assertEquals(2, $result->getDiff()->getBodySummary()['+']);
+        $this->assertEquals(3, $result->getDiff()->getBodySummary()['-']);
     }
 
     public function testReturningDifferenceInResponseStatus()
@@ -65,10 +64,10 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $requestB = new Request();
         $requestB->setUrl(sprintf('http://%s:%d/notFound.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
-        $diff = $this->sut->compare($requestA, $requestB);
+        $result = $this->sut->compare($requestA, $requestB);
 
-        $this->assertTrue($diff->hasDifference());
-        $this->assertTrue($diff->hasDifferentStatus());
-        $this->assertNotEmpty($diff->render());
+        $this->assertTrue($result->getDiff()->hasDifference());
+        $this->assertTrue($result->getDiff()->hasDifferentStatus());
+        $this->assertNotEmpty($result->getDiff()->render());
     }
 }
