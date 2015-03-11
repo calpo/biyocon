@@ -12,11 +12,23 @@ use Biyocon\Http\Request;
 
 class Crawler
 {
+    /**
+     * constructor
+     *
+     * @param Client $client
+     */
     public function __construct (Client $client = null)
     {
         $this->client = new PhantomJsClient();
     }
 
+    /**
+     * Crawl pages, compare responses and return difference.
+     *
+     * @param Request $requestA
+     * @param Request $requestB
+     * @return Diff
+     */
     public function compare (Request $requestA, Request $requestB)
     {
         $responseA = $this->client->send($requestA);

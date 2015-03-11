@@ -21,8 +21,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $this->sut = new Crawler();
     }
 
-    //public function testComparingSameResponseReturnsZeroDifference()
-    public function xxxxComparingSameResponseReturnsZeroDifference()
+    public function testNotingToBeRenderedWithSameResponse()
     {
         $requestA = new Request();
         $requestA->setUrl(sprintf('http://%s:%d/index.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
@@ -32,21 +31,42 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $diff = $this->sut->compare($requestA, $requestB);
 
-        print_r($diff);
-        $this->markTestIncomplete('Diffクラス未実装');
+        echo $diff->render();
+        $this->assertFalse($diff->hasDifference());
+        $this->assertEmpty($diff->render());
     }
 
-    public function testComparingDifferenceResponseHeader()
+    public function testToRenderDifferenceInResponseBody()
+    {
+        $requestA = new Request();
+        $requestA->setUrl(sprintf('http://%s:%d/jsonA.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
+
+        $requestB = new Request();
+        $requestB->setUrl(sprintf('http://%s:%d/jsonB.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
+
+        $diff = $this->sut->compare($requestA, $requestB);
+
+        //print_r($diff->countBodyDiff());
+        //$html = $diff::wrapHtml($diff->render());
+        //file_put_contents('./tmp.html', $html);
+
+        $this->assertTrue($diff->hasDifference());
+        $this->assertTrue($diff->hasDifferentBody());
+        $this->assertNotEmpty($diff->render());
+    }
+
+    public function testComparingDifferenceResponseStatus()
     {
         $requestA = new Request();
         $requestA->setUrl(sprintf('http://%s:%d/index.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
         $requestB = new Request();
-        $requestB->setUrl(sprintf('http://%s:%d/jsonA.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
+        $requestB->setUrl(sprintf('http://%s:%d/notFound.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
 
         $diff = $this->sut->compare($requestA, $requestB);
 
-        print_r($diff);
-        $this->markTestIncomplete('Diffクラス未実装');
+        $this->assertTrue($diff->hasDifference());
+        $this->assertTrue($diff->hasDifferentStatus());
+        $this->assertNotEmpty($diff->render());
     }
 }
