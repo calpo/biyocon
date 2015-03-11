@@ -36,7 +36,7 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $this->assertEmpty($diff->render());
     }
 
-    public function testToRenderDifferenceInResponseBody()
+    public function testReturningDifferenceInResponseBody()
     {
         $requestA = new Request();
         $requestA->setUrl(sprintf('http://%s:%d/jsonA.php', WEB_SERVER_HOST, WEB_SERVER_PORT));
@@ -53,9 +53,11 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($diff->hasDifference());
         $this->assertTrue($diff->hasDifferentBody());
         $this->assertNotEmpty($diff->render());
+        $this->assertEquals(2, $diff->getBodySummary()['+']);
+        $this->assertEquals(3, $diff->getBodySummary()['-']);
     }
 
-    public function testComparingDifferenceResponseStatus()
+    public function testReturningDifferenceInResponseStatus()
     {
         $requestA = new Request();
         $requestA->setUrl(sprintf('http://%s:%d/index.php', WEB_SERVER_HOST, WEB_SERVER_PORT));

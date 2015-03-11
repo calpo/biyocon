@@ -77,22 +77,9 @@ class Diff
         return !empty($this->bodyDiff->getGroupedOpcodes());
     }
 
-    public function countBodyDiff()
+    public function getBodySummary()
     {
-        $renderer = new \Diff_Renderer_Text_Unified();
-        $list = explode("\n", $this->bodyDiff->render($renderer));
-        $count = [
-            '+' => 0,
-            '-' => 0,
-        ];
-        foreach ($list as $line) {
-            if (preg_match('/^([-+])/', $line, $matches)) {
-                $count[$matches[1]]++;
-            }
-        }
-
-        print_r($count);
-        return $count;
+        return $this->buildSummary($this->bodyDiff);
     }
 
     /**
@@ -244,5 +231,27 @@ EOT;
     {
         $this->renderer = $renderer;
         return $this;
+    }
+
+    private function buildSummary(\Diff $diff)
+    {
+        $summary = [
+            '+' => 0,
+            '-' => 0,
+        ];
+
+        $renderer = new \Diff_Renderer_Text_Unified();
+        $list = explode("\n", $diff->render($renderer));
+        if (empty($list)) {
+            return $summary;
+        }
+
+        foreach ($list as $line) {
+            if (preg_match('/^([-+])/', $line, $matches)) {
+                $summary[$matches[1]]++;
+            }
+        }
+
+        return $summary;
     }
 }
