@@ -45,10 +45,6 @@ class CrawlerTest extends \PHPUnit_Framework_TestCase
 
         $result = $this->sut->compare($requestA, $requestB);
 
-        //print_r($result->getDiff()->countBodyDiff());
-        //$html = $result->getDiff()::wrapHtml($result->getDiff()->render());
-        //file_put_contents('./tmp.html', $html);
-
         $this->assertTrue($result->getDiff()->hasDifference());
         $this->assertTrue($result->getDiff()->hasDifferentBody());
         $this->assertNotEmpty($result->getDiff()->render());

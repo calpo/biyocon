@@ -71,6 +71,9 @@ class HtmlBuilder
      * Create result html files
      *
      * Existing file in directory will be removed.
+     *
+     * @throws \Biyocon\Exception\ResultBuildingException
+     * @throws \LogicException
      */
     public function build()
     {
@@ -83,6 +86,11 @@ class HtmlBuilder
         if (file_put_contents($this->indexHtmlFile, $html) === false) {
             throw new ResultBuildingException("failed to create file [{$this->indexHtmlFile}]");
         };
+
+        $this->copyFile('php-diff-style.css');
+        $this->copyFile('result.css');
+        $this->copyFile('jquery.js');
+        $this->copyFile('application.js');
     }
 
     /**
@@ -102,33 +110,29 @@ class HtmlBuilder
      */
     protected function buildWholeHtml()
     {
-        $partialHtml = <<<EO_PARTIAL
-<style>
-.diff-item {margin-bottom: 3px;}
-.diff-item table.summary {
-    border-collapse: collapse;
-    border-spacing: 0;
-    empty-cells: show;
-}
-.diff-item table.summary th {width: 70px;}
-.diff-item table.summary th,
-.diff-item table.summary td {
-    padding: 3px; border: 1px solid #000;
-}
-.diff-item table.no-diff tr.url th {color: #00cc00;}
-.diff-item table.has-diff tr.url th {color: #cc0000;}
-.diff-item table.summary span.added {color: #00cc00;}
-.diff-item table.summary span.removed {color: #cc0000;}
-</style>
-
-EO_PARTIAL;
+        $partialHtml = '';
 
         /** @var \Biyocon\Comparator\Result $result */
         foreach ($this->list as $result) {
             $partialHtml .= $this->buildPartialHtml($result);
         }
 
-        return Diff::wrapHtml($partialHtml);
+        return <<<EOT
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Differences</title>
+        <link href="./php-diff-style.css" rel="stylesheet" type="text/css">
+        <link href="./result.css" rel="stylesheet" type="text/css">
+        <script src="./jquery.js"></script>
+        <script src="./application.js"></script>
+    </head>
+    <body>
+    {$partialHtml}
+    </body>
+</html>
+EOT;
     }
 
     /**
@@ -150,7 +154,7 @@ EO_PARTIAL;
         $partialBody = $this->buildPartialBodyTable($result);
         $detail = $result->getDiff()->render();
 
-        return <<<EO_PARTIAL
+        return <<<EOT
 <div class="diff-item">
     <table class="summary $class">
         <tr class="url">
@@ -167,7 +171,7 @@ EO_PARTIAL;
     </div>
 </div>
 
-EO_PARTIAL;
+EOT;
     }
 
     private function buildPartialStatusTable(Result $result)
@@ -179,14 +183,14 @@ EO_PARTIAL;
         $statusA = Util::h($result->getResponseA()->getStatus());
         $statusB = Util::h($result->getResponseB()->getStatus());
 
-        return <<<EO_PARTIAL_STATUS
+        return <<<EOT
 <tr class="diff-status">
     <th>Http status</th>
     <td>$statusA</td>
     <td>$statusB</td>
 </tr>
 
-EO_PARTIAL_STATUS;
+EOT;
     }
 
     private function buildPartialHeaderTable(Result $result)
@@ -213,7 +217,7 @@ EO_PARTIAL_STATUS;
 
     private function buildPartialSummaryColumn($summary, $class, $title)
     {
-        return <<<EO_PARTIAL_STATUS
+        return <<<EOT
 <tr class="$class">
     <th>$title diff</th>
     <td colspan="2">
@@ -222,6 +226,18 @@ EO_PARTIAL_STATUS;
     </td>
 </tr>
 
-EO_PARTIAL_STATUS;
+EOT;
+    }
+
+    private function copyFile($filename)
+    {
+        $assetsDir = __DIR__ . '/assets';
+        $resultDir = $this->getDirectory();
+        $source = "$assetsDir/$filename";
+        $dest = "$resultDir/$filename";
+
+        if (!copy($source, $dest)) {
+            throw new ResultBuildingException("failed to copy file [$source] to [$dest]");
+        }
     }
 }

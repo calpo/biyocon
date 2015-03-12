@@ -1,0 +1,18 @@
+.diff-item {margin-bottom: 3px;}
+.diff-item table.summary {
+    border-collapse: collapse;
+    border-spacing: 0;
+    empty-cells: show;
+    cursor: pointer;
+}
+.diff-item table.summary th {width: 70px;}
+.diff-item table.summary th,
+.diff-item table.summary td {
+    padding: 3px; border: 1px solid #000;
+}
+.diff-item table.no-diff tr.url th {color: #00cc00;}
+.diff-item table.has-diff tr.url th {color: #cc0000;}
+.diff-item table.summary span.added {color: #00cc00;}
+.diff-item table.summary span.removed {color: #cc0000;}
+
+.diff-item .diff-detail {display: none;}
