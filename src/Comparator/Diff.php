@@ -77,6 +77,25 @@ class Diff
         return !empty($this->bodyDiff->getGroupedOpcodes());
     }
 
+    /**
+     * @return array  number of lines (added and removed)
+     *                  [
+     *                      '+' => (added count),
+     *                      '-' => (removed count),
+     *                  ]
+     */
+    public function getHeaderSummary()
+    {
+        return $this->buildSummary($this->headerDiff);
+    }
+
+    /**
+     * @return array  number of lines (added and removed)
+     *                  [
+     *                      '+' => (added count),
+     *                      '-' => (removed count),
+     *                  ]
+     */
     public function getBodySummary()
     {
         return $this->buildSummary($this->bodyDiff);
@@ -91,9 +110,6 @@ class Diff
     {
         $html = '';
 
-        if ($this->hasDifferentStatus()) {
-            $html .= $this->statusDiff->render($this->renderer) . PHP_EOL;
-        }
         if ($this->hasDifferentHeader()) {
             $html .= $this->headerDiff->render($this->renderer) . PHP_EOL;
         }
