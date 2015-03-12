@@ -76,4 +76,23 @@ class Util
         return htmlspecialchars($string, ENT_QUOTES | ENT_HTML5, 'UTF-8');
     }
 
+    /**
+     * @param string $directory
+     */
+    public static function deleteDirectory($directory)
+    {
+        if (!is_dir($directory)) {
+            return ;
+        }
+
+        foreach (glob("{$directory}/*") as $file) {
+            if(is_dir($file)) {
+                static::deleteDirectory($file);
+            } else {
+                unlink($file);
+            }
+        }
+        rmdir($directory);
+    }
+
 }

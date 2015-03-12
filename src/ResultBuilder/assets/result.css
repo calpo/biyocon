@@ -3,16 +3,19 @@
     border-collapse: collapse;
     border-spacing: 0;
     empty-cells: show;
-    cursor: pointer;
 }
-.diff-item table.summary th {width: 70px;}
+.diff-item table.has-diff {cursor: pointer;}
+
 .diff-item table.summary th,
 .diff-item table.summary td {
     padding: 3px; border: 1px solid #000;
 }
-.diff-item table.no-diff tr.url th {color: #00cc00;}
-.diff-item table.has-diff tr.url th {color: #cc0000;}
-.diff-item table.summary span.added {color: #00cc00;}
-.diff-item table.summary span.removed {color: #cc0000;}
+.diff-item table.summary th {width: 60px;}
+.diff-item table.summary td.diff-count {width: 120px;}
+.diff-item table.summary td.url {width: 270px; white-space: nowrap; word-break: break-all;}
+.diff-item table.no-diff th.message {color: #00cc00;}
+.diff-item table.has-diff th.message {color: #cc0000;}
+.diff-item span.added {color: #00cc00;}
+.diff-item span.removed {color: #cc0000;}
 
 .diff-item .diff-detail {display: none;}

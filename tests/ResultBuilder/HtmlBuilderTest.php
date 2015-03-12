@@ -8,6 +8,7 @@ namespace Biyocon\Test\ResultBuilder;
 use Biyocon\Comparator\Crawler;
 use Biyocon\Http\Request;
 use Biyocon\ResultBuilder\HtmlBuilder;
+use Biyocon\Util\Util;
 
 class HtmlBuilderTest extends \PHPUnit_Framework_TestCase
 {
@@ -24,17 +25,27 @@ class HtmlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->sut->initialize();
     }
 
+    protected function tearDown()
+    {
+        //exec('open ' . $this->sut->getDirectory());
+        Util::deleteDirectory($this->sut->getDirectory());
+    }
+
     public function testBuildingResultHtml()
     {
         $this->sut->add($this->crawlResult('htmlA.php', 'htmlA.php'));
         $this->sut->add($this->crawlResult('htmlA.php', 'htmlB.php'));
         $this->sut->add($this->crawlResult('htmlA.php', 'jsonA.php'));
+        $this->sut->add($this->crawlResult('htmlA.php', 'notFound.php'));
 
         $this->sut->build();
 
-        echo $this->sut->getDirectory();
-        exec('open ' . $this->sut->getDirectory());
-        $this->markTestIncomplete();
+        $directory = $this->sut->getDirectory();
+        $this->assertFileExists($this->sut->getHtmlFile());
+        $this->assertFileExists("$directory/result.css");
+        $this->assertFileExists("$directory/php-diff-style.css");
+        $this->assertFileExists("$directory/application.js");
+        $this->assertFileExists("$directory/jquery.js");
     }
 
     private function crawlResult($fileA, $fileB)

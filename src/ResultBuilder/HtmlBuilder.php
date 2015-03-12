@@ -6,7 +6,6 @@
 namespace Biyocon\ResultBuilder;
 
 
-use Biyocon\Comparator\Diff;
 use Biyocon\Comparator\Result;
 use Biyocon\Exception\ResultBuildingException;
 use Biyocon\Util\Util;
@@ -87,10 +86,7 @@ class HtmlBuilder
             throw new ResultBuildingException("failed to create file [{$this->indexHtmlFile}]");
         };
 
-        $this->copyFile('php-diff-style.css');
-        $this->copyFile('result.css');
-        $this->copyFile('jquery.js');
-        $this->copyFile('application.js');
+        $this->createAssetFiles();
     }
 
     /**
@@ -101,6 +97,26 @@ class HtmlBuilder
     public function getDirectory()
     {
         return $this->directory;
+    }
+
+    /**
+     * Returns result html file
+     *
+     * @return string
+     */
+    public function getHtmlFile()
+    {
+        return $this->indexHtmlFile;
+    }
+    /**
+     * Create CSS, JS, etc in result directory
+     */
+    protected function createAssetFiles()
+    {
+        $this->copyFile('php-diff-style.css');
+        $this->copyFile('result.css');
+        $this->copyFile('jquery.js');
+        $this->copyFile('application.js');
     }
 
     /**
@@ -129,7 +145,7 @@ class HtmlBuilder
         <script src="./application.js"></script>
     </head>
     <body>
-    {$partialHtml}
+        {$partialHtml}
     </body>
 </html>
 EOT;
@@ -142,39 +158,41 @@ EOT;
     protected function buildPartialHtml(Result $result)
     {
         $class = 'no-diff';
+        $message = 'Same';
         if ($result->getDiff()->hasDifference()) {
             $class = 'has-diff';
+            $message = 'Diff';
         }
 
         $urlA = Util::h($result->getRequestA()->getUrl());
         $urlB = Util::h($result->getRequestB()->getUrl());
 
-        $partialStatus = $this->buildPartialStatusTable($result);
-        $partialHeader = $this->buildPartialHeaderTable($result);
-        $partialBody = $this->buildPartialBodyTable($result);
+        $partialStatus = $this->buildPartialHtmlStatus($result);
+        $partialHeader = $this->buildPartialHtmlHeader($result);
+        $partialBody = $this->buildPartialHtmlBody($result);
         $detail = $result->getDiff()->render();
 
         return <<<EOT
 <div class="diff-item">
     <table class="summary $class">
-        <tr class="url">
-            <th>URL</td>
-            <td>$urlA</td>
-            <td>$urlB</td>
+        <tr>
+            <th class="message">$message</td>
+            <td class="diff-count">
+            $partialStatus
+            $partialHeader
+            $partialBody
+            </td>
+            <td class="url">$urlA</td>
+            <td class="url">$urlB</td>
         </tr>
-        $partialStatus
-        $partialHeader
-        $partialBody
     </table>
-    <div class="diff-detail">
-    $detail
-    </div>
+    <div class="diff-detail">$detail</div>
 </div>
 
 EOT;
     }
 
-    private function buildPartialStatusTable(Result $result)
+    protected function buildPartialHtmlStatus(Result $result)
     {
         if (!$result->getDiff()->hasDifferentStatus()) {
             return '';
@@ -184,16 +202,15 @@ EOT;
         $statusB = Util::h($result->getResponseB()->getStatus());
 
         return <<<EOT
-<tr class="diff-status">
-    <th>Http status</th>
-    <td>$statusA</td>
-    <td>$statusB</td>
-</tr>
+Status
+<span class="added">$statusA</span>
+: <span class="removed">$statusB</span>
+<br>
 
 EOT;
     }
 
-    private function buildPartialHeaderTable(Result $result)
+    protected function buildPartialHtmlHeader(Result $result)
     {
         if (!$result->getDiff()->hasDifferentHeader()) {
             return '';
@@ -201,10 +218,10 @@ EOT;
 
         $summary = $result->getDiff()->getHeaderSummary();
 
-        return $this->buildPartialSummaryColumn($summary, 'diff-header', 'header');
+        return $this->buildPartialSummaryColumn($summary, 'Header');
     }
 
-    private function buildPartialBodyTable(Result $result)
+    protected function buildPartialHtmlBody(Result $result)
     {
         if (!$result->getDiff()->hasDifferentBody()) {
             return '';
@@ -212,19 +229,16 @@ EOT;
 
         $summary = $result->getDiff()->getBodySummary();
 
-        return $this->buildPartialSummaryColumn($summary, 'diff-body', 'body');
+        return $this->buildPartialSummaryColumn($summary, 'Body');
     }
 
-    private function buildPartialSummaryColumn($summary, $class, $title)
+    protected function buildPartialSummaryColumn($summary, $title)
     {
         return <<<EOT
-<tr class="$class">
-    <th>$title diff</th>
-    <td colspan="2">
-        <span class="added">+{$summary['+']}</span>
-        : <span class="removed">-{$summary['-']}</span>
-    </td>
-</tr>
+$title
+<span class="added">+{$summary['+']}</span>
+: <span class="removed">-{$summary['-']}</span>
+<br>
 
 EOT;
     }

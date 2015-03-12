@@ -1,5 +1,5 @@
 $(function(){
-    $(".diff-item").on("click", ".summary", function() {
+    $(".diff-item").on("click", ".has-diff", function() {
         $('.diff-detail', $(this).parent()).slideToggle();
     });
 });
