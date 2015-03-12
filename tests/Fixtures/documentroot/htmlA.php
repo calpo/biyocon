@@ -6,5 +6,6 @@ header('Content-Type: text/html; charset=utf-8');
 hello world
 good morning
 勝って兜の緒を締めよ
+<a href="http://localhost:10080">foo</a>
 </body>
 </html>

@@ -30,10 +30,10 @@ class Request
         $query = '';
         $fragment = '';
         if (!empty($this->user)) {
-            $user = $this->user . '@';
+            $user = $this->user . ':';
         }
         if (!empty($this->pass)) {
-            $pass = $this->pass . ':';
+            $pass = $this->pass . '@';
         }
         if (!empty($this->port)) {
             $port = ':' . $this->port;
@@ -55,14 +55,36 @@ class Request
             $fragment;
     }
 
+    /**
+     * @return array
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     * @return string
+     */
     public function getMethod()
     {
         return $this->method;
+    }
+
+    /**
+     * @return string
+     */
+    public function getHost()
+    {
+        return $this->host;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPort()
+    {
+        return $this->port;
     }
 
     /**

@@ -9,6 +9,7 @@ namespace Biyocon\Comparator;
 use Biyocon\Client\Client;
 use Biyocon\Client\PhantomJsClient;
 use Biyocon\Http\Request;
+use Biyocon\Mask\DomainMask;
 
 class Crawler
 {
@@ -41,7 +42,12 @@ class Crawler
 
         $comparator = new ResponseComparator();
 
-        $diff = $comparator->compare($responseA, $responseB);
+
+        // TODO 外部から設定
+        $comparator->addBodyMask(new DomainMask());
+
+
+        $diff = $comparator->compare($requestA, $requestB, $responseA, $responseB);
 
         return new Result($diff, $requestA, $requestB, $responseA, $responseB);
     }

@@ -12,7 +12,7 @@
 }
 .diff-item table.summary th {width: 60px;}
 .diff-item table.summary td.diff-count {width: 120px;}
-.diff-item table.summary td.url {width: 270px; white-space: nowrap; word-break: break-all;}
+.diff-item table.summary td.url {width: 350px; white-space: nowrap; word-break: break-all;}
 .diff-item table.no-diff th.message {color: #00cc00;}
 .diff-item table.has-diff th.message {color: #cc0000;}
 .diff-item span.added {color: #00cc00;}

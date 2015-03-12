@@ -7,5 +7,6 @@ hello world
 good night
 勝って兜の美味しんぼ
 additional line
+<a href="http://localhost:10080">foo</a>
 </body>
 </html>
