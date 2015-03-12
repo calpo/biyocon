@@ -25,6 +25,8 @@ class DomainMaskTest extends \PHPUnit_Framework_TestCase
     /**
      * @dataProvider provideRequestUrls
      * @param string $requestUrl
+     * @param string $target
+     * @param string $expected
      */
     public function testMaskDomainString($requestUrl, $target, $expected)
     {
