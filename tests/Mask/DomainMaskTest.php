@@ -23,7 +23,7 @@ class DomainMaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideRequestUrls
+     * @dataProvider provideMaskingTestCase
      * @param string $requestUrl
      * @param string $target
      * @param string $expected
@@ -38,7 +38,7 @@ class DomainMaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->sut->mask($target, $request, $response));
     }
 
-    public function provideRequestUrls()
+    public function provideMaskingTestCase()
     {
         $masked = DomainMask::MASK;
 

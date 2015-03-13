@@ -23,7 +23,7 @@ class NoCacheQueryMaskTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider provideRequestUrls
+     * @dataProvider provideMaskingTestCase
      * @param string $target
      * @param string $expected
      */
@@ -35,7 +35,7 @@ class NoCacheQueryMaskTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $this->sut->mask($target, $request, $response));
     }
 
-    public function provideRequestUrls()
+    public function provideMaskingTestCase()
     {
         $masked = NoCacheQueryMask::MASK;
 
