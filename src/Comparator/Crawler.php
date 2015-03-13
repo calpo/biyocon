@@ -9,7 +9,9 @@ namespace Biyocon\Comparator;
 use Biyocon\Client\Client;
 use Biyocon\Client\PhantomJsClient;
 use Biyocon\Http\Request;
+use Biyocon\Mask\CurrentDateTimeMask;
 use Biyocon\Mask\DomainMask;
+use Biyocon\Mask\NoCacheQueryMask;
 
 class Crawler
 {
@@ -44,7 +46,11 @@ class Crawler
 
 
         // TODO 外部から設定
+        $comparator->addHeaderMask(new DomainMask());
+        $comparator->addHeaderMask(new CurrentDateTimeMask());
         $comparator->addBodyMask(new DomainMask());
+        $comparator->addBodyMask(new CurrentDateTimeMask());
+        $comparator->addBodyMask(new NoCacheQueryMask());
 
 
         $diff = $comparator->compare($requestA, $requestB, $responseA, $responseB);

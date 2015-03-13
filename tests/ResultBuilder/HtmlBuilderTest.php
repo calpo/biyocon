@@ -38,6 +38,13 @@ class HtmlBuilderTest extends \PHPUnit_Framework_TestCase
         $this->sut->add($this->crawlResult('htmlA.php', 'jsonA.php'));
         $this->sut->add($this->crawlResult('htmlA.php', 'notFound.php'));
 
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/', 'http://oshiete.goo.ne.jp/'));
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/qa/123456.html', 'http://oshiete.goo.ne.jp/qa/123456.html'));
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/watcher/', 'http://oshiete.goo.ne.jp/watcher/'));
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/qa/9999999.html', 'http://oshiete.goo.ne.jp/qa/9999999.html'));
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/api/category', 'http://oshiete.goo.ne.jp/api/category'));
+        //$this->sut->add($this->crawlExternalResult('http://oshiete.goo.ne.jp/rd/hoge/fuga/?http://oshiete.goo.ne.jp/', 'http://oshiete.goo.ne.jp/rd/hoge/fuga/?http://oshiete.goo.ne.jp/'));
+
         $this->sut->build();
 
         $directory = $this->sut->getDirectory();
@@ -55,6 +62,19 @@ class HtmlBuilderTest extends \PHPUnit_Framework_TestCase
 
         $requestB = new Request();
         $requestB->setUrl(sprintf('http://%s:%d/%s', WEB_SERVER_HOST, WEB_SERVER_PORT, $fileB));
+
+        $crawler = new Crawler();
+
+        return $crawler->compare($requestA, $requestB);
+    }
+
+    private function crawlExternalResult($urlA, $urlB)
+    {
+        $requestA = new Request();
+        $requestA->setUrl($urlA);
+
+        $requestB = new Request();
+        $requestB->setUrl($urlB);
 
         $crawler = new Crawler();
 

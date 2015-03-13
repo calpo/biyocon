@@ -82,6 +82,9 @@ class CurrentDateTimeMask implements Mask
             ], [
                 'pattern' => "/({$shortWeekdays}, {$dmy4s} {$his} {$gtmDiff})/",
                 'mask' => 'RFC1123',
+            ], [
+                'pattern' => "/({$shortWeekdays}, {$dmy4s} {$his} {$zone})/",
+                'mask' => 'HTTP',
             ],
         ];
     }

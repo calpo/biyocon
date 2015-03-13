@@ -39,18 +39,19 @@ class CurrentDateTimeMaskTest extends \PHPUnit_Framework_TestCase
     public function provideMaskingTimeTestCase()
     {
         $formats = [
-            'ATOM',
-            'COOKIE',
-            'ISO8601',
-            'RFC822',
-            'RFC850',
-            'RFC1123',
+            [DATE_ATOM, 'MASKED_ATOM'],
+            [DATE_COOKIE, 'MASKED_COOKIE'],
+            [DATE_ISO8601, 'MASKED_ISO8601'],
+            [DATE_RFC822, 'MASKED_RFC822'],
+            [DATE_RFC850, 'MASKED_RFC850'],
+            [DATE_RFC1123, 'MASKED_RFC1123'],
+            ['D, d M Y H:i:s T', 'MASKED_HTTP'],
         ];
         $case = [];
         foreach ($formats as $format) {
             $case = array_merge(
                 $case,
-                $this->getTestCaseByDateFormat(constant("DATE_{$format}"), "MASKED_{$format}")
+                $this->getTestCaseByDateFormat($format[0], $format[1])
             );
         }
 
